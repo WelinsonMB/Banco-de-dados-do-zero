@@ -1,0 +1,106 @@
+CREATE DATABASE mecanica;
+use mecanica; 
+
+-- tabela cliente
+create table cliente
+(
+	idCliente INT auto_increment primary key,
+	Pnome VARCHAR(15) not null,
+    Snome varchar(15) not null,
+    CPF INT not null,
+	Endereco varchar (20) not null,
+    constraint unique_CPF_Cliente unique(CPF) 
+);
+
+-- craição tabela veiculo
+create table veiculo
+(
+	idVeiculo INT auto_increment primary key,
+	Modelo VARCHAR(15) not null,
+    Placa varchar(10) not null,
+	Marca varchar (20) not null,
+    Ano INT not null,
+    idCliente INT not null,
+    constraint fk_idCliente_Veiculo foreign key (idCliente) references cliente(idCliente),
+    constraint unique_placa_Veiculo unique (Placa)
+);
+
+-- criação tabela equipe
+create table equipe
+(
+	idEquipe int auto_increment primary key,
+	Enome VARCHAR(15) not null,
+	Dinicio date not null -- data da criação da equipe
+);
+
+-- criação tabela mecanico
+create table mecanico
+(
+	idMecanico INT auto_increment primary key,
+	Pnome VARCHAR(15) not null,
+    Snome varchar(15) not null,
+	Endereco varchar (20) not null,
+    especialidade varchar(45)
+);
+
+-- criação tabela Equipe_mecanico
+create table Equipe_Mecanico
+(
+	idEquipe INT,
+	idMecanico int,
+    primary key (idEquipe,idMecanico),
+    constraint fk_idEquipe_Equipe_Mecanico foreign key (idEquipe) references Equipe(IdEquipe),
+    constraint fk_idMecanico_Equipe_Mecanico foreign key (idMecanico) references mecanico(idMecanico)
+);
+
+-- Criação tabela ordem de serviço
+create table OS
+(
+	idOS INT auto_increment primary key,
+	DataEmissao date not null,
+    DataConclucao date not null,
+	valor float not null,
+    StatusOS ENUM ('Andamento','Finalizado','Preparacao') not null default 'Preparacao',
+    idVeiculo int not null,
+    idEquipe int not null,
+    constraint fk_idVeiculo_OS foreign key (idVeiculo) references veiculo(idVeiculo),
+    constraint fk_idEquipe_OS foreign key (idEquipe) references equipe(idEquipe)
+);
+
+-- Criação da tabela serviço
+create table servico
+(
+	idServico INT auto_increment primary key,
+	DescServico VARCHAR(255),
+    ValorMaoDeObra FLOAT not null
+);
+
+-- Criação tabela Serviço da OS
+create table servico_OS
+(
+	idOS int not null,
+    idServico int not null,
+    primary key (idOS,idServico),
+	constraint fk_idOS_Servico_OS foreign key (idOS) references OS(idOS),
+    constraint fk_idServico_Servico_OS foreign key (idServico) references servico(idServico) 
+);
+
+-- Criação da tabela Peça 
+-- Utilizei sem o "ç" para evitar conflitos de BD
+create table peca
+(
+	idPeca INT auto_increment primary key, 
+	Pnome VARCHAR(30) not null,
+    ValorPeca FLOAT not null,
+	DescPeca varchar (15) not null
+);
+
+-- Criação da Tabela Peça da Ordem de Serviço 
+create table Peca_OS
+(
+	idPeca int not null,
+	idOS int not null,
+    Quantidade INT not null,
+	CONSTRAINT fk_idPeca_PecaOS foreign key (idPeca) references peca(idPeca),
+    CONSTRAINT fk_idOS_PecaOS FOREIGN KEY (idOS) references OS(idOS)
+);
