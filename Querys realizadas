@@ -1,0 +1,57 @@
+-- Recuperações Simples com SELECT Statement
+
+select * from cliente; -- recuperar clientes
+select concat(Pnome,' ',Snome) as 'Nome do Cliente',CPF, Endereco as 'Endereço' from cliente; -- recuperar nome completo, cpf e endereço do cliente 
+select concat(Pnome,' ',Snome) as 'Nome do Mecanico',Endereco, Especialidade from mecanico;
+select Modelo,placa,ano from veiculo; 
+
+-- Filtros com WHERE Stetement
+
+select * from cliente where Snome = 'Oliveira';  -- recuperar clientes com sobrenome silva
+select * from veiculo where ano >= 2015; -- recuperar veiculos com ano maior ou igual 2015
+select * from mecanico where especialidade = 'freios'; -- recuperar mecanico com especialidade em frios
+
+-- Expressões para gerar atriubutos derivados
+
+-- recuperando a soma da mão de obra com a soma da peça comprada pela mecânica
+select
+  c.Pnome as 'Nome do Cliente',
+  v.Modelo as 'Modelo do Veiculo',
+  s.DescServico as 'Descrição do Serviço',
+  s.ValorMaoDeObra as 'Valor da Mão de Obra',
+  p.Pnome as 'Peça Trocada',
+  p.ValorPeca as 'Valor da Peça Trocada',
+  (p.ValorPeca + s.ValorMaoDeObra) AS 'Total Parcial'
+from cliente c
+join veiculo v using (idCliente)
+JOIN OS ord using(idVeiculo)
+JOIN servico_OS so using(idOS)
+JOIN servico s ON s.idServico = so.idServico
+JOIN peca_OS po ON ord.idOS = po.idOS
+JOIN peca p ON p.idPeca = po.idPeca;
+  
+-- Usando ORDER BY
+
+show tables;
+select concat(Pnome,' ',Snome) as 'Nome do Cliente',CPF, Endereco as 'Endereço' 
+from cliente order by Pnome asc; -- recuperar nome completo, cpf e endereço do cliente, e ordenar por ordem crescente 
+
+select * from veiculo order by ano asc; -- Veiculos por ordem de ano crescente
+
+
+-- Usando o having
+
+-- Equipes com mais de 2 mecânicos
+SELECT idEquipe, COUNT(*) AS TotalMecanicos
+FROM Equipe_Mecanico
+GROUP BY idEquipe
+HAVING COUNT(*) > 2;
+
+-- Nome do serviço realizado e o nome completo do mecânico envolvido na equipe
+select s.DescServico as 'Descrição do serviço', concat(m.Pnome, m.Snome) as 'Nome do Mecânico'
+from servico_OS sos
+join servico s using(idServico)
+join OS ON sos.idOS = OS.idOS
+join equipe e on os.idEquipe = e.idEquipe
+join Equipe_Mecanico em on e.idEquipe = em.idEquipe
+join mecanico m on em.idMecanico = m.idMecanico;
