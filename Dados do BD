@@ -1,0 +1,76 @@
+-- Clientes
+INSERT INTO cliente (Pnome, Snome, CPF, Endereco) VALUES
+('João', 'Silva', 12345678901, 'Rua A, 123'),
+('Maria', 'Oliveira', 23456789012, 'Rua B, 456'),
+('Carlos', 'Santos', 34567890123, 'Rua C, 789'),
+('Ana', 'Martins', 45678901234, 'Rua D, 101'),
+('Bruno', 'Souza', 56789012345, 'Rua E, 202');
+
+-- Veículos
+INSERT INTO veiculo (Modelo, Placa, Marca, Ano, idCliente) VALUES
+('Civic', 'ABC1234', 'Honda', 2015, 1),
+('Corolla', 'XYZ5678', 'Toyota', 2018, 2),
+('Uno', 'DEF3456', 'Fiat', 2012, 3),
+('Onix', 'GHI7890', 'Chevrolet', 2020, 4),
+('Gol', 'JKL4321', 'Volkswagen', 2016, 5);
+
+-- Equipes
+INSERT INTO equipe (Enome, Dinicio) VALUES
+('Equipe A', '2022-01-10'),
+('Equipe B', '2023-06-15');
+
+-- Mecânicos
+INSERT INTO mecanico (Pnome, Snome, Endereco, especialidade) VALUES
+('Pedro', 'Lima', 'Rua F, 111', 'Motor'),
+('Lucas', 'Ferreira', 'Rua G, 222', 'Freios'),
+('Marcos', 'Souza', 'Rua H, 333', 'Suspensão'),
+('Rafael', 'Costa', 'Rua I, 444', 'Transmissão'),
+('Thiago', 'Moraes', 'Rua J, 555', 'Elétrica');
+
+-- Equipe-Mecânico
+INSERT INTO Equipe_Mecanico (idEquipe, idMecanico) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 4),
+(2, 5);
+
+-- Ordens de Serviço (OS)
+INSERT INTO OS (DataEmissao, DataConclucao, valor, StatusOS, idVeiculo, idEquipe) VALUES
+('2024-03-01', '2024-03-05', 850.0, 'Finalizado', 1, 1),
+('2024-03-10', '2024-03-12', 400.0, 'Finalizado', 2, 1),
+('2024-03-15', '2024-03-20', 1200.0, 'Andamento', 3, 1),
+('2024-03-18', '2024-03-22', 900.0, 'Finalizado', 4, 2),
+('2024-03-20', '2024-03-25', 500.0, 'Preparacao', 5, 2);
+
+-- Serviços
+INSERT INTO servico (DescServico, ValorMaoDeObra) VALUES
+('Troca de óleo', 100.0),
+('Alinhamento e balanceamento', 150.0),
+('Revisão geral', 300.0),
+('Troca de embreagem', 450.0),
+('Limpeza de bicos', 120.0);
+
+-- Serviço da OS
+INSERT INTO servico_OS (idOS, idServico) VALUES
+(1, 1),
+(1, 2),
+(2, 3),
+(3, 4),
+(4, 5);
+
+-- Peças
+INSERT INTO peca (Pnome, ValorPeca, DescPeca) VALUES
+('Filtro de óleo', 30.0, 'Filtro'),
+('Pastilha de freio', 120.0, 'Freio'),
+('Amortecedor', 250.0, 'Suspensão'),
+('Embreagem', 600.0, 'Transmissão'),
+('Velas de ignição', 80.0, 'Ignição');
+
+-- Peça da OS
+INSERT INTO Peca_OS (idPeca, idOS, Quantidade) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 2),
+(4, 4, 1),
+(5, 5, 4);
